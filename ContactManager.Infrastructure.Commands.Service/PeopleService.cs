@@ -40,11 +40,11 @@ namespace ContactManager.Infrastructure.Commands.Service
 
         }
 
-        public void Remove(People appIn)
-        {
-            _mongoCollection.DeleteOne(people => people.Id == appIn.Id);
+        //public void Remove(People appIn)
+        //{
+        //    _mongoCollection.DeleteOne(people => people.Id == appIn.Id);
 
-        }
+        //}
 
         public void Remove(string id)
         {
