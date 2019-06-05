@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <PackageReference Include="MongoDB.Driver" Version="2.8.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ContactManager.Infrastructure.Commands.Interface\ContactManager.Infrastructure.Commands.Interface.csproj" />
+      <ProjectReference Include="..\ContactManager.Infrastructure.Domain\ContactManager.Infrastructure.Domain.csproj" />
+      <ProjectReference Include="..\ContactManager.Infrastructure.Repositories.Interface\ContactManager.Infrastructure.Repositories.Interface.csproj" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+</Project>
