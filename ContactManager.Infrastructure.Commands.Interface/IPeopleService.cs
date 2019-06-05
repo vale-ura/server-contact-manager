@@ -11,7 +11,7 @@ namespace ContactManager.Infrastructure.Commands.Interface
         People Get(string id);
         void Create(People application);
         void Update(string id, People appIn);
-        void Remove(People appIn);
+        //void Remove(People appIn);
         void Remove(string id);
     }
 }
