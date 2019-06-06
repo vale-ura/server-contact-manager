@@ -1,14 +1,18 @@
 using System;
+using System.Collections.Generic;
 using ContactManager.Facade.Interface.Contact;
+using ContactManager.Infrastructure.Commands.Interface;
+using ContactManager.Infrastructure.Domain.Data;
 using ContactManager.Infrastructure.Domain.DTO.Filters;
 
 namespace ContactManager.Facade.Service.Contact
 {
     public class ContactFacade : IContactFacade
     {
-        public ContactFacade()
+        private readonly IPeopleService _peopleService;
+        public ContactFacade(IPeopleService peopleService)
         {
-
+            _peopleService = peopleService;
         }
 
         public void Create()
@@ -26,7 +30,7 @@ namespace ContactManager.Facade.Service.Contact
             throw new NotImplementedException();
         }
 
-        public object Get(FilterDTO filters)
+        public IEnumerable<People> Get(FilterDTO filters)
         {
             throw new NotImplementedException();
         }

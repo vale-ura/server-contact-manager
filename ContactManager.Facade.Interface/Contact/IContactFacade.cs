@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ContactManager.Infrastructure.Domain.Data;
 using ContactManager.Infrastructure.Domain.DTO.Filters;
 
 namespace ContactManager.Facade.Interface.Contact
@@ -19,7 +21,7 @@ namespace ContactManager.Facade.Interface.Contact
 
         void Get(string id);
 
-        object Get(FilterDTO filters);
+        IEnumerable<People> Get(FilterDTO filters);
 
         void Create();
 
