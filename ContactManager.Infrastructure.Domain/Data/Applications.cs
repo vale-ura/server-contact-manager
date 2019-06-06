@@ -14,6 +14,9 @@ namespace ContactManager.Infrastructure.Domain.Data
 
         [BsonElement("Description")]
         public string Description { get; set; }
+
+        [BsonElement]
+        public bool Excluded { get; set; }
     }
 }
 

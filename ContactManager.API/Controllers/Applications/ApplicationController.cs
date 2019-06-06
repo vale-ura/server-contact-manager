@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ContactManager.Facade.Interface.Application;
 using ContactManager.API.Helpers;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace ContactManager.API.Controllers.Applications
 {
@@ -17,16 +18,32 @@ namespace ContactManager.API.Controllers.Applications
             _application = application;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("")]
         // GET
-        public ReturnViewModel Get(FilterAppDTO filter)
+        public async Task<ReturnViewModel> Post(FilterDTO filter)
         {
             try
             {
+                var data = await _application.GetByName(filter.Name);
+
                 return new ReturnViewModel(HttpStatusCode.OK,
-                                           _application.GetByName(filter.Name),
+                                           data,
                                            false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+            }
+        }
+
+        [HttpGet]
+        [Route("")]
+        public ReturnViewModel Get()
+        {
+            try
+            {
+                return new ReturnViewModel(HttpStatusCode.OK, _application.Get(), false);
             }
             catch (System.Exception ex)
             {

@@ -3,6 +3,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ContactManager.Facade.Interface\ContactManager.Facade.Interface.csproj" />
       <ProjectReference Include="..\ContactManager.Infrastructure.Domain\ContactManager.Infrastructure.Domain.csproj" />
+      <ProjectReference Include="..\ContactManager.Infrastructure.Commands.Interface\ContactManager.Infrastructure.Commands.Interface.csproj" />
     </ItemGroup>
 
     <PropertyGroup>

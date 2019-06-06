@@ -1,12 +1,19 @@
 using System;
+using System.Collections.Generic;
 using ContactManager.Facade.Interface.Application;
+using ContactManager.Infrastructure.Domain.Data;
+using ContactManager.Infrastructure.Commands.Interface;
+using System.Threading.Tasks;
 
 namespace ContactManager.Facade.Service.Application
 {
     public class ApplicationFacade : IApplicationFacade
     {
-        public ApplicationFacade()
+        private readonly IApplicationsService _applicationService;
+
+        public ApplicationFacade(IApplicationsService applicationService)
         {
+            _applicationService = applicationService;
         }
 
         public void Create()
@@ -14,19 +21,19 @@ namespace ContactManager.Facade.Service.Application
             throw new NotImplementedException();
         }
 
-        public object Get()
+        public async Task<IEnumerable<Applications>> Get()
         {
-            throw new NotImplementedException();
+            return await _applicationService.Get();
         }
 
-        public object Get(string id)
+        public async Task<Applications> Get(string id)
         {
-            throw new NotImplementedException();
+            return await _applicationService.Get(id);
         }
 
-        public object GetByName(string name)
+        public async Task<IEnumerable<Applications>> GetByName(string name)
         {
-            throw new NotImplementedException();
+            return await _applicationService.GetByName(name);
         }
 
         public void Remove(string id)

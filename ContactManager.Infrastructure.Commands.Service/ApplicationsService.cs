@@ -4,6 +4,8 @@ using ContactManager.Infrastructure.Domain.Data;
 using ContactManager.Infrastructure.Repositories.Interface.Context;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ContactManager.Infrastructure.Commands.Service
 {
@@ -20,14 +22,39 @@ namespace ContactManager.Infrastructure.Commands.Service
             _mongoCollection = _context.DatabaseBase.GetCollection<Applications>("Applications");
         }
 
-        public List<Applications> Get()
+        public async Task<IEnumerable<Applications>> Get()
         {
-            return _mongoCollection.Find(applications => true).ToList();
+            return await _mongoCollection.FindSync(x => x.Excluded == false).ToListAsync();
         }
-        
-        public Applications Get(string id)
+
+        public async Task<Applications> Get(string id)
         {
-            return _mongoCollection.Find<Applications>(applications => applications.Id == id).FirstOrDefault();
+            return await _mongoCollection.FindSync(x => x.Id == id && x.Excluded == false).FirstAsync();
+        }
+
+        public async Task<IEnumerable<Applications>> GetByName(string name)
+        {
+            var data = await _mongoCollection.FindAsync(x => x.Name.Contains(name) && 
+                                                        x.Excluded == false);
+
+            var dataReturned = new List<Applications>();
+
+            while (await data.MoveNextAsync())
+            {
+                dataReturned.AddRange(data.Current.AsEnumerable());
+            }
+
+            return dataReturned.AsEnumerable();
+        }
+
+        private async Task<List<Applications>> Teste()
+        {
+            return await Task.Run<List<Applications>>(() =>
+            {
+                List<Applications> lista = new List<Applications>();
+                lista.Add(new Applications { Name = "Teste", Description = "Teste Des", Id = "1", Excluded = false });
+                return lista;
+            });
         }
         public void Create(Applications application)
         {
@@ -39,16 +66,9 @@ namespace ContactManager.Infrastructure.Commands.Service
             _mongoCollection.ReplaceOne(application => application.Id == id, appIn);
         }
 
-        //public void Remove(Applications appIn)
-        //{
-        //    _mongoCollection.DeleteOne(application => application.Id == appIn.Id);
-
-        //}
-
         public void Remove(string id)
         {
             _mongoCollection.FindOneAndUpdate(app => app.Id == id, new BsonDocument("Deleted", true));
         }
-
     }
 }

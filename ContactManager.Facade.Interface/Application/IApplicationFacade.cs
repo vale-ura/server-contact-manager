@@ -1,25 +1,16 @@
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
+using ContactManager.Infrastructure.Domain.Data;
 
 namespace ContactManager.Facade.Interface.Application
 {
     public interface IApplicationFacade
     {
-        //     List<Applications> Get();
+        Task<IEnumerable<Applications>> Get();
 
-        //     Applications Get(string id);
+        Task<Applications> Get(string id);
 
-        //     void Create(Applications application);
-
-        //     void Update(string id, Applications appIn);
-
-        //     void Remove(string id);
-
-        object Get();
-
-        object Get(string id);
-
-        object GetByName(string name);
+        Task<IEnumerable<Applications>> GetByName(string name);
 
         void Create();
 

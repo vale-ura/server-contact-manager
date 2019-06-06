@@ -4,4 +4,17 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ContactManager.Facade.Interface\ContactManager.Facade.Interface.csproj" />
+      <ProjectReference Include="..\ContactManager.Facade.Service\ContactManager.Facade.Service.csproj" />
+      <ProjectReference Include="..\ContactManager.Infrastructure.Commands.Interface\ContactManager.Infrastructure.Commands.Interface.csproj" />
+      <ProjectReference Include="..\ContactManager.Infrastructure.Commands.Service\ContactManager.Infrastructure.Commands.Service.csproj" />
+      <ProjectReference Include="..\ContactManager.Infrastructure.Repositories.Interface\ContactManager.Infrastructure.Repositories.Interface.csproj" />
+      <ProjectReference Include="..\ContactManager.Infrastructure.Repositories.Services\ContactManager.Infrastructure.Repositories.Services.csproj" />
+    </ItemGroup>
+
 </Project>
