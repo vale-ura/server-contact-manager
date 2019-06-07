@@ -29,13 +29,15 @@ namespace ContactManager.Infrastructure.Commands.Service
 
         public async Task<Applications> Get(string id)
         {
-            return await _mongoCollection.FindSync(x => x.Id == id && x.Excluded == false).FirstAsync();
+            return await _mongoCollection.FindSync(x => x.Name == id && x.Excluded == false).FirstAsync();
         }
 
         public async Task<IEnumerable<Applications>> GetByName(string name)
         {
             var data = await _mongoCollection.FindAsync(x => x.Name.Contains(name) && 
                                                         x.Excluded == false);
+
+            
 
             var dataReturned = new List<Applications>();
 

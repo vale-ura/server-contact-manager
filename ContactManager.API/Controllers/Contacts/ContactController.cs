@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ContactManager.Facade.Interface.Contact;
 using ContactManager.API.Helpers;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace ContactManager.API.Controllers.Contacts
 {
@@ -19,17 +20,40 @@ namespace ContactManager.API.Controllers.Contacts
 
         [HttpGet]
         [Route("")]
-        public ReturnViewModel Get(FilterDTO filters)
+        //GET - OK
+        public async Task<ReturnViewModel> Get()
         {
             try
             {
-                return new ReturnViewModel(HttpStatusCode.OK,_contactFacade.Get(filters),false);
+                var data = await _contactFacade.Get();
+
+                return new ReturnViewModel(HttpStatusCode.OK,
+                                            data,
+                                            false);
             }
             catch (System.Exception ex)
             {
-                return new ReturnViewModel(HttpStatusCode.BadRequest,ex.Message,true);
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
             }
         }
+
+        //[HttpGet]
+        //[Route("")]
+        ////GetID
+        //public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
+        //{
+        //    try
+        //    {
+        //        var data = await _contactFacade.Get(filter.Name);
+        //        return new ReturnViewModel(HttpStatusCode.OK,
+        //                                    data,
+        //                                    false);
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+        //    }
+        //}
 
         [HttpPost]
         [Route("save")]

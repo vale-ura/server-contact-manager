@@ -20,8 +20,8 @@ namespace ContactManager.API.Controllers.Applications
 
         [HttpPost]
         [Route("")]
-        // GET
-        public async Task<ReturnViewModel> Post(FilterDTO filter)
+        // POST - OK
+        public async Task<ReturnViewModel> Post([FromBody]FilterDTO filter)
         {
             try
             {
@@ -39,11 +39,34 @@ namespace ContactManager.API.Controllers.Applications
 
         [HttpGet]
         [Route("")]
-        public ReturnViewModel Get()
+        //GET - OK
+        public async Task<ReturnViewModel> Get()
         {
             try
             {
-                return new ReturnViewModel(HttpStatusCode.OK, _application.Get(), false);
+                var data = await _application.Get();
+
+                return new ReturnViewModel(HttpStatusCode.OK,
+                                            data,
+                                            false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+            }
+        }
+
+        [HttpGet]
+        [Route("")]
+        //GetID
+        public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
+        {
+            try
+            {
+                var data = await _application.Get(filter.Name);
+                return new ReturnViewModel(HttpStatusCode.OK,
+                                            data,
+                                            false);
             }
             catch (System.Exception ex)
             {

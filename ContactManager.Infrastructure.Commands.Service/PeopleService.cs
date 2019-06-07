@@ -5,6 +5,7 @@ using ContactManager.Infrastructure.Repositories.Interface.Context;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ContactManager.Infrastructure.Commands.Service
 {
@@ -19,15 +20,32 @@ namespace ContactManager.Infrastructure.Commands.Service
             _context = context;
             _mongoCollection = _context.DatabaseBase.GetCollection<People>("People");
         }
-        public List<People> Get()
+        public async Task<IEnumerable<People>> Get()
         {
-            return _mongoCollection.Find(people => true).ToList();
+            //return _mongoCollection.Find(people => true).ToList();
+            return await _mongoCollection.FindSync(x => x.Excluded == false).ToListAsync();
         }
 
-        public People Get(string id)
+        public async Task<People> Get(string id)
         {
-            return _mongoCollection.Find<People>(people => people.Id == id).FirstOrDefault();
+            //return _mongoCollection.Find<People>(people => people.Id == id).FirstOrDefault();
+            return await _mongoCollection.FindSync(x => x.Name == id && x.Excluded == false).FirstAsync();
 
+        }
+
+        public async Task<IEnumerable<People>> GetByName(string name)
+        {
+            var data = await _mongoCollection.FindAsync(x => x.Name.Contains(name) &&
+                                                       x.Excluded == false);
+
+            var dataReturned = new List<People>();
+
+            while (await data.MoveNextAsync())
+            {
+                dataReturned.AddRange(data.Current.AsEnumerable());
+            }
+
+            return dataReturned.AsEnumerable();
         }
 
         public void Create(People people)
@@ -58,7 +76,7 @@ namespace ContactManager.Infrastructure.Commands.Service
         {
             IQueryable<People> query = _mongoCollection.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(filterDTO.Name)) //Remove IF
+            if (!string.IsNullOrWhiteSpace(filterDTO.Name))
             {
                 query = query.Where(x => x.Name.Contains(filterDTO.Name));
             }

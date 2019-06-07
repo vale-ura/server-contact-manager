@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ContactManager.Facade.Interface.Contact;
 using ContactManager.Infrastructure.Commands.Interface;
 using ContactManager.Infrastructure.Domain.Data;
@@ -19,21 +20,21 @@ namespace ContactManager.Facade.Service.Contact
         {
             throw new NotImplementedException();
         }
-
-        public void Get()
+        public async Task<IEnumerable<People>> Get()
         {
-            throw new NotImplementedException();
+            return await _peopleService.Get();
         }
 
-        public void Get(string id)
+        public async Task<People> Get(string id)
         {
-            throw new NotImplementedException();
+            return await _peopleService.Get(id);
         }
 
-        public IEnumerable<People> Get(FilterDTO filters)
+        public async Task<IEnumerable<People>> GetByName(string name)
         {
-            throw new NotImplementedException();
+            return await _peopleService.GetByName(name);
         }
+
         public object Remove(string id)
         {
             throw new NotImplementedException();
@@ -43,5 +44,6 @@ namespace ContactManager.Facade.Service.Contact
         {
             throw new NotImplementedException();
         }
+
     }
 }

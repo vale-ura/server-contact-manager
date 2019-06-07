@@ -20,11 +20,11 @@ namespace ContactManager.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             CommandsInjection.RegisterService(services);
-            // ContextInjection.RegisterService(services);
+            ContextInjection.RegisterService(services);
             FacadeInjection.RegisterService(services);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

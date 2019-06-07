@@ -10,7 +10,6 @@ namespace ContactManager.Infrastructure.Commands.Interface
         Task<IEnumerable<Applications>> Get();
         Task<Applications> Get(string id);
         Task<IEnumerable<Applications>> GetByName(string name);
-        
         void Create(Applications application);
         void Update(string id, Applications appIn);
         //void Remove(Applications appIn);
