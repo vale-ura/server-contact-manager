@@ -5,6 +5,7 @@ using ContactManager.Facade.Interface.Contact;
 using ContactManager.API.Helpers;
 using System.Net;
 using System.Threading.Tasks;
+using System;
 
 namespace ContactManager.API.Controllers.Contacts
 {
@@ -13,14 +14,13 @@ namespace ContactManager.API.Controllers.Contacts
     {
         private readonly IContactFacade _contactFacade;
 
-        public ContactController( IContactFacade contactFacade)
+        public ContactController(IContactFacade contactFacade)
         {
             _contactFacade = contactFacade;
         }
 
         [HttpGet]
         [Route("")]
-        //GET - OK
         public async Task<ReturnViewModel> Get()
         {
             try
@@ -37,47 +37,68 @@ namespace ContactManager.API.Controllers.Contacts
             }
         }
 
-        //[HttpGet]
-        //[Route("")]
-        ////GetID
-        //public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
-        //{
-        //    try
-        //    {
-        //        var data = await _contactFacade.Get(filter.Name);
-        //        return new ReturnViewModel(HttpStatusCode.OK,
-        //                                    data,
-        //                                    false);
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
-        //    }
-        //}
+        [HttpGet]
+        [Route("search")]
+        public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
+        {
+            try
+            {
+                var data = await _contactFacade.Get(filter.Name);
+                return new ReturnViewModel(HttpStatusCode.OK,
+                                            data,
+                                            false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+            }
+        }
 
         [HttpPost]
         [Route("save")]
-        public IActionResult Save(ContactDTO contact)
+        public ReturnViewModel Save([FromBody]ContactDTO contact)
         {
-            return Ok();
+            try
+            {
+                var app = AutoMapper.Mapper.Map<ContactDTO, Infrastructure.Domain.Data.People>(contact);
+
+                _contactFacade.Create(app);
+
+                return new ReturnViewModel(HttpStatusCode.OK, "Save Successfully", false);
+            }
+            catch(System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+            }
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("edit")]
-        public IActionResult Edit(ContactDTO contact)
+        public ReturnViewModel Edit(ContactDTO contact)
         {
-            return Ok();
+            try
+            {
+                var app = AutoMapper.Mapper.Map<ContactDTO, Infrastructure.Domain.Data.People>(contact);
+
+                _contactFacade.Update(contact.Id, app);
+
+                return new ReturnViewModel(HttpStatusCode.OK, "Update Successfully", false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+            }
         }
         
         [HttpDelete]
         [Route("delete")]
-        public ReturnViewModel Delete(string id)
+        public ReturnViewModel Delete([FromBody]DeleteDTO contact)
         {
             try
             {
-                var data = _contactFacade.Remove(id);
+                _contactFacade.Remove(contact.Id);
 
-                return new ReturnViewModel(HttpStatusCode.OK,new{ deletado = data },false);
+                return new ReturnViewModel(HttpStatusCode.OK,new{ deletado = true },false);
             }
             catch (System.Exception ex)
             {

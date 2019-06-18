@@ -14,10 +14,10 @@ namespace ContactManager.Facade.Interface.Contact
 
         Task<IEnumerable<People>> GetByName(string name);
 
-        void Create();
+        void Create(People people);
 
-        void Update();
+        void Update(string id, People app);
 
-        object Remove(string id);
+        void Remove(string id);
     }
 }

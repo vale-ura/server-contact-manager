@@ -12,9 +12,9 @@ namespace ContactManager.Facade.Interface.Application
 
         Task<IEnumerable<Applications>> GetByName(string name);
 
-        void Create();
+        void Create(Applications application);
 
-        void Update(string id);
+        void Update(string id,Applications app);
 
         void Remove(string id);
     }

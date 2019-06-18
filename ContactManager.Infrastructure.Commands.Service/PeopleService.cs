@@ -2,6 +2,7 @@
 using ContactManager.Infrastructure.Domain.Data;
 using ContactManager.Infrastructure.Domain.DTO.Filters;
 using ContactManager.Infrastructure.Repositories.Interface.Context;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,21 @@ namespace ContactManager.Infrastructure.Commands.Service
         public PeopleService(IMongoContext context)
         {
             _context = context;
+            //var test = _context.DatabaseBase.GetCollection<TDocument>("People");
             _mongoCollection = _context.DatabaseBase.GetCollection<People>("People");
         }
         public async Task<IEnumerable<People>> Get()
         {
-            //return _mongoCollection.Find(people => true).ToList();
-            return await _mongoCollection.FindSync(x => x.Excluded == false).ToListAsync();
+            var data = await _mongoCollection.FindAsync(x =>x.Excluded == false);
+
+            var dataReturned = new List<People>();
+
+            while (await data.MoveNextAsync())
+            {
+                dataReturned.AddRange(data.Current.AsEnumerable());
+            }
+
+            return dataReturned.AsEnumerable();
         }
 
         public async Task<People> Get(string id)
@@ -60,15 +70,10 @@ namespace ContactManager.Infrastructure.Commands.Service
 
         }
 
-        //public void Remove(People appIn)
-        //{
-        //    _mongoCollection.DeleteOne(people => people.Id == appIn.Id);
-
-        //}
-
         public void Remove(string id)
         {
-            _mongoCollection.DeleteOne(people => people.Id == id);
+            _mongoCollection.UpdateOne(Builders<People>.Filter.Eq("_id", ObjectId.Parse(id)),
+                                        Builders<People>.Update.Set("Excluded", true));
 
         }
 

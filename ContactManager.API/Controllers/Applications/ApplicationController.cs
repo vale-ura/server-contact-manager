@@ -57,8 +57,8 @@ namespace ContactManager.API.Controllers.Applications
         }
 
         [HttpGet]
-        [Route("")]
-        //GetID
+        [Route("search")]
+   
         public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
         {
             try
@@ -76,26 +76,48 @@ namespace ContactManager.API.Controllers.Applications
 
         [HttpPost]
         [Route("save")]
-        public IActionResult Save(ApplicationDTO application)
+        public ReturnViewModel Save([FromBody]ApplicationDTO application)
         {
-            return Ok();
+            try
+            {
+                var app = AutoMapper.Mapper.Map<ApplicationDTO, Infrastructure.Domain.Data.Applications>(application);
+
+                _application.Create(app);
+
+                return new ReturnViewModel(HttpStatusCode.OK, "Save successfully", false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+            }
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("edit")]
-        public IActionResult Edit(ApplicationDTO application)
+        public ReturnViewModel Edit([FromBody]ApplicationDTO application)
         {
-            return Ok();
+            try
+            {
+                var app = AutoMapper.Mapper.Map<ApplicationDTO, Infrastructure.Domain.Data.Applications>(application);
+
+                _application.Update(application.Id, app);
+
+                return new ReturnViewModel(HttpStatusCode.OK, "Update Successfully", false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message , true);
+            }
         }
 
         [HttpDelete]
         [Route("delete")]
-        public ReturnViewModel Delete(string id)
+        public ReturnViewModel Delete([FromBody]DeleteDTO application )
         {
             try
             {
-                _application.Remove(id);
-
+                _application.Remove(application.Id);
+                
                 return new ReturnViewModel(HttpStatusCode.OK, new { deletado = true }, false);
             }
             catch (System.Exception ex)

@@ -16,7 +16,7 @@ namespace ContactManager.Facade.Service.Contact
             _peopleService = peopleService;
         }
 
-        public void Create()
+        public void Create(People people)
         {
             throw new NotImplementedException();
         }
@@ -35,14 +35,14 @@ namespace ContactManager.Facade.Service.Contact
             return await _peopleService.GetByName(name);
         }
 
-        public object Remove(string id)
+        public void Remove(string id)
         {
-            throw new NotImplementedException();
+           _peopleService.Remove(id);
         }
 
-        public void Update()
+        public void Update(string id, People people)
         {
-            throw new NotImplementedException();
+            _peopleService.Update(id, people);
         }
 
     }
