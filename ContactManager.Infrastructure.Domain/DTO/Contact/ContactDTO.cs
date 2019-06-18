@@ -8,6 +8,12 @@ namespace ContactManager.Infrastructure.Domain.DTO.Contact
     {
         public string Name { get; set; }
 
+        public string Id { get; set; }
+
+        public string Email { get; set; }
+
+        public string Phone { get; set; }
+
         public List<ApplicationDTO> Applications { get; set; }
     }
 }

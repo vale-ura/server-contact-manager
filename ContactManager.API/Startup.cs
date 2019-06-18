@@ -1,4 +1,6 @@
-﻿using ContactManager.Shared.InjectionDependencies.CommandsDependency;
+﻿using AutoMapper;
+using ContactManager.API.ConfigurationMapper;
+using ContactManager.Shared.InjectionDependencies.CommandsDependency;
 using ContactManager.Shared.InjectionDependencies.ContextDependency;
 using ContactManager.Shared.InjectionDependencies.FacadeDepedency;
 using Microsoft.AspNetCore.Builder;
@@ -20,11 +22,13 @@ namespace ContactManager.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             CommandsInjection.RegisterService(services);
-            // ContextInjection.RegisterService(services);
+            ContextInjection.RegisterService(services);
             FacadeInjection.RegisterService(services);
+
+            Mapper.Initialize(cfg => cfg.AddProfile<MapperConfig>());
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -1,43 +1,49 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ContactManager.Facade.Interface.Contact;
+using ContactManager.Infrastructure.Commands.Interface;
+using ContactManager.Infrastructure.Domain.Data;
 using ContactManager.Infrastructure.Domain.DTO.Filters;
 
 namespace ContactManager.Facade.Service.Contact
 {
     public class ContactFacade : IContactFacade
     {
-        public ContactFacade()
+        private readonly IPeopleService _peopleService;
+        public ContactFacade(IPeopleService peopleService)
         {
-
+            _peopleService = peopleService;
         }
 
-        public void Create()
+        public void Create(People people)
         {
             throw new NotImplementedException();
         }
-
-        public void Get()
+        public async Task<IEnumerable<People>> Get()
         {
-            throw new NotImplementedException();
+            return await _peopleService.Get();
         }
 
-        public void Get(string id)
+        public async Task<People> Get(string id)
         {
-            throw new NotImplementedException();
+            return await _peopleService.Get(id);
         }
 
-        public object Get(FilterDTO filters)
+        public async Task<IEnumerable<People>> GetByName(string name)
         {
-            throw new NotImplementedException();
-        }
-        public object Remove(string id)
-        {
-            throw new NotImplementedException();
+            return await _peopleService.GetByName(name);
         }
 
-        public void Update()
+        public void Remove(string id)
         {
-            throw new NotImplementedException();
+           _peopleService.Remove(id);
         }
+
+        public void Update(string id, People people)
+        {
+            _peopleService.Update(id, people);
+        }
+
     }
 }

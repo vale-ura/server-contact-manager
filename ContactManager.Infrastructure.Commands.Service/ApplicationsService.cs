@@ -6,7 +6,6 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace ContactManager.Infrastructure.Commands.Service
 {
     public class ApplicationsService : IApplicationsService
@@ -29,13 +28,15 @@ namespace ContactManager.Infrastructure.Commands.Service
 
         public async Task<Applications> Get(string id)
         {
-            return await _mongoCollection.FindSync(x => x.Id == id && x.Excluded == false).FirstAsync();
+            return await _mongoCollection.FindSync(x => x.Name == id && x.Excluded == false).FirstAsync();
         }
 
         public async Task<IEnumerable<Applications>> GetByName(string name)
         {
-            var data = await _mongoCollection.FindAsync(x => x.Name.Contains(name) && 
+            var data = await _mongoCollection.FindAsync(x => x.Name.Contains(name) &&
                                                         x.Excluded == false);
+
+
 
             var dataReturned = new List<Applications>();
 
@@ -47,15 +48,6 @@ namespace ContactManager.Infrastructure.Commands.Service
             return dataReturned.AsEnumerable();
         }
 
-        private async Task<List<Applications>> Teste()
-        {
-            return await Task.Run<List<Applications>>(() =>
-            {
-                List<Applications> lista = new List<Applications>();
-                lista.Add(new Applications { Name = "Teste", Description = "Teste Des", Id = "1", Excluded = false });
-                return lista;
-            });
-        }
         public void Create(Applications application)
         {
             _mongoCollection.InsertOne(application);
@@ -68,7 +60,9 @@ namespace ContactManager.Infrastructure.Commands.Service
 
         public void Remove(string id)
         {
-            _mongoCollection.FindOneAndUpdate(app => app.Id == id, new BsonDocument("Deleted", true));
+            _mongoCollection.UpdateOne(Builders<Applications>.Filter.Eq("_id", ObjectId.Parse(id)),
+                                   Builders<Applications>.Update.Set("Excluded", true));
         }
+
     }
 }

@@ -1,30 +1,23 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ContactManager.Infrastructure.Domain.Data;
 using ContactManager.Infrastructure.Domain.DTO.Filters;
 
 namespace ContactManager.Facade.Interface.Contact
 {
     public interface IContactFacade
     {
-        // List<People> Get();
+        Task<IEnumerable<People>> Get();
 
-        // People Get(string id);
+        Task<People> Get(string id);
 
-        // void Create(People application);
+        Task<IEnumerable<People>> GetByName(string name);
 
-        // void Update(string id, People appIn);
+        void Create(People people);
 
-        // void Remove(People appIn);
+        void Update(string id, People app);
 
-        void Get();
-
-        void Get(string id);
-
-        object Get(FilterDTO filters);
-
-        void Create();
-
-        void Update();
-
-        object Remove(string id);
+        void Remove(string id);
     }
 }

@@ -1,5 +1,7 @@
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ContactManager.Infrastructure.Domain.Data
@@ -24,7 +26,12 @@ namespace ContactManager.Infrastructure.Domain.Data
 
         [BsonElement("Applications")]
         [BsonRequired()]
-        public Applications Applications { get; set; }
+        [BsonRepresentation(BsonType.Array)]
+        public IList<Applications> Applications { get; set; }
+
+        [BsonElement("Excluded")]
+        [BsonRequired()]
+        public bool Excluded { get; set; }
     }
 }
 

@@ -20,8 +20,8 @@ namespace ContactManager.API.Controllers.Applications
 
         [HttpPost]
         [Route("")]
-        // GET
-        public async Task<ReturnViewModel> Post(FilterDTO filter)
+        // POST - OK
+        public async Task<ReturnViewModel> Post([FromBody]FilterDTO filter)
         {
             try
             {
@@ -39,11 +39,34 @@ namespace ContactManager.API.Controllers.Applications
 
         [HttpGet]
         [Route("")]
-        public ReturnViewModel Get()
+        //GET - OK
+        public async Task<ReturnViewModel> Get()
         {
             try
             {
-                return new ReturnViewModel(HttpStatusCode.OK, _application.Get(), false);
+                var data = await _application.Get();
+
+                return new ReturnViewModel(HttpStatusCode.OK,
+                                            data,
+                                            false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+            }
+        }
+
+        [HttpGet]
+        [Route("search")]
+   
+        public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
+        {
+            try
+            {
+                var data = await _application.Get(filter.Name);
+                return new ReturnViewModel(HttpStatusCode.OK,
+                                            data,
+                                            false);
             }
             catch (System.Exception ex)
             {
@@ -53,26 +76,48 @@ namespace ContactManager.API.Controllers.Applications
 
         [HttpPost]
         [Route("save")]
-        public IActionResult Save(ApplicationDTO application)
+        public ReturnViewModel Save([FromBody]ApplicationDTO application)
         {
-            return Ok();
+            try
+            {
+                var app = AutoMapper.Mapper.Map<ApplicationDTO, Infrastructure.Domain.Data.Applications>(application);
+
+                _application.Create(app);
+
+                return new ReturnViewModel(HttpStatusCode.OK, "Save successfully", false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
+            }
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("edit")]
-        public IActionResult Edit(ApplicationDTO application)
+        public ReturnViewModel Edit([FromBody]ApplicationDTO application)
         {
-            return Ok();
+            try
+            {
+                var app = AutoMapper.Mapper.Map<ApplicationDTO, Infrastructure.Domain.Data.Applications>(application);
+
+                _application.Update(application.Id, app);
+
+                return new ReturnViewModel(HttpStatusCode.OK, "Update Successfully", false);
+            }
+            catch (System.Exception ex)
+            {
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message , true);
+            }
         }
 
         [HttpDelete]
         [Route("delete")]
-        public ReturnViewModel Delete(string id)
+        public ReturnViewModel Delete([FromBody]DeleteDTO application )
         {
             try
             {
-                _application.Remove(id);
-
+                _application.Remove(application.Id);
+                
                 return new ReturnViewModel(HttpStatusCode.OK, new { deletado = true }, false);
             }
             catch (System.Exception ex)

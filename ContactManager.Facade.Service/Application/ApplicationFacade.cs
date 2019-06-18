@@ -16,9 +16,9 @@ namespace ContactManager.Facade.Service.Application
             _applicationService = applicationService;
         }
 
-        public void Create()
+        public void Create(Applications application)
         {
-            throw new NotImplementedException();
+            _applicationService.Create(application);
         }
 
         public async Task<IEnumerable<Applications>> Get()
@@ -38,12 +38,12 @@ namespace ContactManager.Facade.Service.Application
 
         public void Remove(string id)
         {
-            throw new NotImplementedException();
+            _applicationService.Remove(id);
         }
 
-        public void Update(string id)
+        public void Update(string id,Applications app)
         {
-            throw new NotImplementedException();
+            _applicationService.Update(id, app);
         }
     }
 }
