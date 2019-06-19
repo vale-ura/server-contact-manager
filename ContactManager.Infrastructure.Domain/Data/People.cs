@@ -26,12 +26,14 @@ namespace ContactManager.Infrastructure.Domain.Data
 
         [BsonElement("Applications")]
         [BsonRequired()]
-        [BsonRepresentation(BsonType.Array)]
-        public IList<Applications> Applications { get; set; }
+        //[BsonRepresentation(BsonType.Array)]
+        public IList<Applications> Apps { get; set; }
+
 
         [BsonElement("Excluded")]
         [BsonRequired()]
         public bool Excluded { get; set; }
     }
+
 }
 

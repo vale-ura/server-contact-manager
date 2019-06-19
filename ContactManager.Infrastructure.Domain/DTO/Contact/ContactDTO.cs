@@ -14,6 +14,6 @@ namespace ContactManager.Infrastructure.Domain.DTO.Contact
 
         public string Phone { get; set; }
 
-        public List<ApplicationDTO> Applications { get; set; }
+        public IList<ApplicationDTO> Applications { get; set; }
     }
 }

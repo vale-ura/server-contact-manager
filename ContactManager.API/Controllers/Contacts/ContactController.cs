@@ -74,7 +74,7 @@ namespace ContactManager.API.Controllers.Contacts
 
         [HttpPut]
         [Route("edit")]
-        public ReturnViewModel Edit(ContactDTO contact)
+        public ReturnViewModel Edit([FromBody]ContactDTO contact)
         {
             try
             {
