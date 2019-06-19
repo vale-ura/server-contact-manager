@@ -20,7 +20,7 @@ namespace ContactManager.API.ConfigurationMapper
             .ForMember(dest => dest.Id, source => source.MapFrom(s => s.Id))
             .ForMember(dest => dest.Phone, source => source.MapFrom(s => s.Phone))
             .ForMember(dest => dest.Email, source => source.MapFrom(s => s.Email))
-            .ForMember(dest => dest.Applications, source => source.MapFrom(s => Mapper.Map<IList<ApplicationDTO>, IList<Applications>>(s.Applications)));
+            .ForMember(dest => dest.Apps, source => source.MapFrom(s => Mapper.Map<IList<ApplicationDTO>, IList<Applications>>(s.Applications)));
         }
     }
 }

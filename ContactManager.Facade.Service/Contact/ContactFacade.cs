@@ -18,7 +18,7 @@ namespace ContactManager.Facade.Service.Contact
 
         public void Create(People people)
         {
-            throw new NotImplementedException();
+            _peopleService.Create(people);
         }
         public async Task<IEnumerable<People>> Get()
         {

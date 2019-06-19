@@ -14,7 +14,6 @@ namespace ContactManager.Infrastructure.Commands.Interface
         Task<IEnumerable<People>> GetByName(string name);
         void Create(People application);
         void Update(string id, People appIn);
-        //void Remove(People appIn);
         void Remove(string id);
     }
 }

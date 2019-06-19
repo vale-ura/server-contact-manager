@@ -3,6 +3,8 @@ using ContactManager.Infrastructure.Domain.Data;
 using ContactManager.Infrastructure.Domain.DTO.Filters;
 using ContactManager.Infrastructure.Repositories.Interface.Context;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +21,9 @@ namespace ContactManager.Infrastructure.Commands.Service
         public PeopleService(IMongoContext context)
         {
             _context = context;
-            //var test = _context.DatabaseBase.GetCollection<TDocument>("People");
             _mongoCollection = _context.DatabaseBase.GetCollection<People>("People");
+            //List<Applications> list = BsonSerializer.Deserialize<List<Applications>>(_mongoCollection.ToJson());
+
         }
         public async Task<IEnumerable<People>> Get()
         {
