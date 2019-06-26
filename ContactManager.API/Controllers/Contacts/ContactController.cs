@@ -5,7 +5,9 @@ using ContactManager.Facade.Interface.Contact;
 using ContactManager.API.Helpers;
 using System.Net;
 using System.Threading.Tasks;
-using System;
+using System.Collections.Generic;
+using AutoMapper;
+using ContactManager.Infrastructure.Domain.Data;
 
 namespace ContactManager.API.Controllers.Contacts
 {
@@ -27,8 +29,10 @@ namespace ContactManager.API.Controllers.Contacts
             {
                 var data = await _contactFacade.Get();
 
+                var result = Mapper.Map<IEnumerable<People>, IEnumerable<ContactDTO>>(data);
+
                 return new ReturnViewModel(HttpStatusCode.OK,
-                                            data,
+                                            result,
                                             false);
             }
             catch (System.Exception ex)
@@ -39,13 +43,16 @@ namespace ContactManager.API.Controllers.Contacts
 
         [HttpGet]
         [Route("search")]
-        public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
+        public async Task<ReturnViewModel> Get(FilterDTO filter)
         {
             try
             {
-                var data = await _contactFacade.Get(filter.Name);
+                var data = await _contactFacade.GetByName(filter.Name);
+
+                var result = Mapper.Map<IEnumerable<People>, IEnumerable<ContactDTO>>(data);
+
                 return new ReturnViewModel(HttpStatusCode.OK,
-                                            data,
+                                            result,
                                             false);
             }
             catch (System.Exception ex)
@@ -66,7 +73,7 @@ namespace ContactManager.API.Controllers.Contacts
 
                 return new ReturnViewModel(HttpStatusCode.OK, "Save Successfully", false);
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
             }
@@ -89,7 +96,7 @@ namespace ContactManager.API.Controllers.Contacts
                 return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
             }
         }
-        
+
         [HttpDelete]
         [Route("delete")]
         public ReturnViewModel Delete([FromBody]DeleteDTO contact)
@@ -98,11 +105,11 @@ namespace ContactManager.API.Controllers.Contacts
             {
                 _contactFacade.Remove(contact.Id);
 
-                return new ReturnViewModel(HttpStatusCode.OK,new{ deletado = true },false);
+                return new ReturnViewModel(HttpStatusCode.OK, new { deletado = true }, false);
             }
             catch (System.Exception ex)
             {
-                return new ReturnViewModel(HttpStatusCode.BadRequest,ex.Message,true);
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
             }
         }
     }

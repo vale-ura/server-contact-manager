@@ -11,16 +11,28 @@ namespace ContactManager.API.ConfigurationMapper
         public MapperConfig()
         {
             CreateMap<ApplicationDTO, Applications>()
-                 .ForMember(dest => dest.Description, source => source.MapFrom(s => s.Description))
-                 .ForMember(dest => dest.Id, source => source.MapFrom(s => s.Id))
-                 .ForMember(dest => dest.Name, source => source.MapFrom(s => s.Name));
+                .ForMember(dest => dest.Description, source => source.MapFrom(s => s.Description))
+                .ForMember(dest => dest.Id, source => source.MapFrom(s => s.Id))
+                .ForMember(dest => dest.Name, source => source.MapFrom(s => s.Name));
 
             CreateMap<ContactDTO, People>()
-            .ForMember(dest => dest.Name, source => source.MapFrom(s => s.Name))
-            .ForMember(dest => dest.Id, source => source.MapFrom(s => s.Id))
-            .ForMember(dest => dest.Phone, source => source.MapFrom(s => s.Phone))
-            .ForMember(dest => dest.Email, source => source.MapFrom(s => s.Email))
-            .ForMember(dest => dest.Apps, source => source.MapFrom(s => Mapper.Map<IList<ApplicationDTO>, IList<Applications>>(s.Applications)));
+                .ForMember(dest => dest.Name, source => source.MapFrom(s => s.Name))
+                .ForMember(dest => dest.Id, source => source.MapFrom(s => s.Id))
+                .ForMember(dest => dest.Phone, source => source.MapFrom(s => s.Phone))
+                .ForMember(dest => dest.Email, source => source.MapFrom(s => s.Email))
+                .ForMember(dest => dest.Apps, source => source.MapFrom(s => Mapper.Map<IList<ApplicationDTO>, IList<Applications>>(s.Applications)));
+
+            CreateMap<Applications, ApplicationDTO>()
+                .ForMember(dest => dest.Description, source => source.MapFrom(s => s.Description))
+                .ForMember(dest => dest.Id, source => source.MapFrom(s => s.Id))
+                .ForMember(dest => dest.Name, source => source.MapFrom(s => s.Name));
+
+            CreateMap<People, ContactDTO>()
+                .ForMember(dest => dest.Name, source => source.MapFrom(s => s.Name))
+                .ForMember(dest => dest.Id, source => source.MapFrom(s => s.Id))
+                .ForMember(dest => dest.Phone, source => source.MapFrom(s => s.Phone))
+                .ForMember(dest => dest.Email, source => source.MapFrom(s => s.Email))
+                .ForMember(dest => dest.Applications, source => source.MapFrom(s => Mapper.Map<IList<Applications>, IList<ApplicationDTO>>(s.Apps)));
         }
     }
 }

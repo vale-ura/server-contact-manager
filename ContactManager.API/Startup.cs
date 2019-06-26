@@ -28,7 +28,9 @@ namespace ContactManager.API
 
             Mapper.Initialize(cfg => cfg.AddProfile<MapperConfig>());
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+                options.CacheProfiles.Add("Default30", new CacheProfile() { Duration = 30 })
+            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
