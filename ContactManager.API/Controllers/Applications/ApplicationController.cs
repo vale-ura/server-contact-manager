@@ -5,6 +5,7 @@ using ContactManager.Facade.Interface.Application;
 using ContactManager.API.Helpers;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace ContactManager.API.Controllers.Applications
 {
@@ -18,10 +19,10 @@ namespace ContactManager.API.Controllers.Applications
             _application = application;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("")]
-        // POST - OK
-        public async Task<ReturnViewModel> Post([FromBody]FilterDTO filter)
+        [ResponseCache(CacheProfileName = "Default30")]
+        public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace ContactManager.API.Controllers.Applications
 
         [HttpGet]
         [Route("")]
-        //GET - OK
+        [ResponseCache(CacheProfileName = "Default30")]
         public async Task<ReturnViewModel> Get()
         {
             try
@@ -56,31 +57,13 @@ namespace ContactManager.API.Controllers.Applications
             }
         }
 
-        [HttpGet]
-        [Route("search")]
-   
-        public async Task<ReturnViewModel> Get([FromBody]FilterDTO filter)
-        {
-            try
-            {
-                var data = await _application.Get(filter.Name);
-                return new ReturnViewModel(HttpStatusCode.OK,
-                                            data,
-                                            false);
-            }
-            catch (System.Exception ex)
-            {
-                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
-            }
-        }
-
         [HttpPost]
         [Route("save")]
         public ReturnViewModel Save([FromBody]ApplicationDTO application)
         {
             try
             {
-                var app = AutoMapper.Mapper.Map<ApplicationDTO, Infrastructure.Domain.Data.Applications>(application);
+                var app = Mapper.Map<ApplicationDTO, Infrastructure.Domain.Data.Applications>(application);
 
                 _application.Create(app);
 
@@ -106,18 +89,18 @@ namespace ContactManager.API.Controllers.Applications
             }
             catch (System.Exception ex)
             {
-                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message , true);
+                return new ReturnViewModel(HttpStatusCode.BadRequest, ex.Message, true);
             }
         }
 
         [HttpDelete]
         [Route("delete")]
-        public ReturnViewModel Delete([FromBody]DeleteDTO application )
+        public ReturnViewModel Delete([FromBody]DeleteDTO application)
         {
             try
             {
                 _application.Remove(application.Id);
-                
+
                 return new ReturnViewModel(HttpStatusCode.OK, new { deletado = true }, false);
             }
             catch (System.Exception ex)

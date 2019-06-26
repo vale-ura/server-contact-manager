@@ -1,4 +1,5 @@
 ﻿using ContactManager.Infrastructure.Commands.Interface;
+using ContactManager.Infrastructure.Commands.Service.Extensions;
 using ContactManager.Infrastructure.Domain.Data;
 using ContactManager.Infrastructure.Domain.DTO.Filters;
 using ContactManager.Infrastructure.Repositories.Interface.Context;
@@ -14,85 +15,81 @@ namespace ContactManager.Infrastructure.Commands.Service
 {
     public class PeopleService : IPeopleService
     {
-        private IMongoCollection<People> _mongoCollection;
+        private IMongoCollection<People> _mongoCollectionPeople;
 
         private readonly IMongoContext _context;
 
         public PeopleService(IMongoContext context)
         {
             _context = context;
-            _mongoCollection = _context.DatabaseBase.GetCollection<People>("People");
-            //List<Applications> list = BsonSerializer.Deserialize<List<Applications>>(_mongoCollection.ToJson());
-
+            _mongoCollectionPeople = _context.DatabaseBase.GetCollection<People>("People");
         }
         public async Task<IEnumerable<People>> Get()
         {
-            var data = await _mongoCollection.FindAsync(x =>x.Excluded == false);
+            var query = from p in _mongoCollectionPeople.AsQueryable()
+                        select p;
 
-            var dataReturned = new List<People>();
-
-            while (await data.MoveNextAsync())
+            var result = new List<People>();
+            foreach (var people in query)
             {
-                dataReturned.AddRange(data.Current.AsEnumerable());
+                if (people.Applications.Any())
+                {
+                    foreach (var app in people.Applications)
+                    {
+                        people.Apps.Add(await _context.DatabaseBase.FetchDBRef<Applications>(app));
+                    }
+                }
+                result.Add(people);
             }
 
-            return dataReturned.AsEnumerable();
+            return result.AsEnumerable();
         }
 
         public async Task<People> Get(string id)
         {
-            //return _mongoCollection.Find<People>(people => people.Id == id).FirstOrDefault();
-            return await _mongoCollection.FindSync(x => x.Name == id && x.Excluded == false).FirstAsync();
+            return await _mongoCollectionPeople.FindSync(x => x.Name == id && x.Excluded == false).FirstAsync();
 
         }
 
         public async Task<IEnumerable<People>> GetByName(string name)
         {
-            var data = await _mongoCollection.FindAsync(x => x.Name.Contains(name) &&
-                                                       x.Excluded == false);
+           var query = from p in _mongoCollectionPeople.AsQueryable()
+                        where p.Name.Contains(name)
+                        select p;
 
-            var dataReturned = new List<People>();
+            var result = new List<People>();
 
-            while (await data.MoveNextAsync())
+            foreach (var people in query)
             {
-                dataReturned.AddRange(data.Current.AsEnumerable());
+                if (people.Applications.Any())
+                {
+                    foreach (var app in people.Applications)
+                    {
+                        people.Apps.Add(await _context.DatabaseBase.FetchDBRef<Applications>(app));
+                    }
+                }
+                result.Add(people);
             }
 
-            return dataReturned.AsEnumerable();
+            return result.AsEnumerable();
         }
 
         public void Create(People people)
         {
-            _mongoCollection.InsertOne(people);
+            _mongoCollectionPeople.InsertOne(people);
 
         }
 
         public void Update(string id, People appIn)
         {
-            _mongoCollection.ReplaceOne(people => people.Id == id, appIn);
-
+            _mongoCollectionPeople.ReplaceOne(people => people.Id == id, appIn);
         }
 
         public void Remove(string id)
         {
-            _mongoCollection.UpdateOne(Builders<People>.Filter.Eq("_id", ObjectId.Parse(id)),
+            _mongoCollectionPeople.UpdateOne(Builders<People>.Filter.Eq("_id", ObjectId.Parse(id)),
                                         Builders<People>.Update.Set("Excluded", true));
 
         }
-
-        public IEnumerable<People> Get(FilterDTO filterDTO)
-        {
-            IQueryable<People> query = _mongoCollection.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(filterDTO.Name))
-            {
-                query = query.Where(x => x.Name.Contains(filterDTO.Name));
-            }
-
-            _mongoCollection.Find<People>(x => x.Name.Contains(filterDTO.Name));
-            throw new System.NotImplementedException();
-        }
     }
-
-
 }
