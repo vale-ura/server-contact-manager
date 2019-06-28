@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using ContactManager.Infrastructure.Domain.DTO.Application;
 
 namespace ContactManager.Infrastructure.Domain.DTO.Contact
@@ -14,6 +14,8 @@ namespace ContactManager.Infrastructure.Domain.DTO.Contact
 
         public string Phone { get; set; }
 
-        public IList<ApplicationDTO> Applications { get; set; }
+        public string[] Applications { get; set; }
+
+        public IList<ApplicationDTO> Apps { get; set; }
     }
 }

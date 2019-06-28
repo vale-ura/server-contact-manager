@@ -53,7 +53,7 @@ namespace ContactManager.Infrastructure.Commands.Service
 
         public async Task<IEnumerable<People>> GetByName(string name)
         {
-           var query = from p in _mongoCollectionPeople.AsQueryable()
+            var query = from p in _mongoCollectionPeople.AsQueryable()
                         where p.Name.Contains(name)
                         select p;
 
@@ -74,10 +74,14 @@ namespace ContactManager.Infrastructure.Commands.Service
             return result.AsEnumerable();
         }
 
-        public void Create(People people)
+        public void Create(People people, string[] apps)
         {
-            _mongoCollectionPeople.InsertOne(people);
+            people.Applications.Clear();
 
+            foreach (var ap in apps)
+                people.Applications.Add(new MongoDBRef("ContactManagerDB", "Applications", new ObjectId(ap)));
+
+            _mongoCollectionPeople.InsertOne(people);
         }
 
         public void Update(string id, People appIn)

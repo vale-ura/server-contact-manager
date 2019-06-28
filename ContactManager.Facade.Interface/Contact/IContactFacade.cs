@@ -14,7 +14,7 @@ namespace ContactManager.Facade.Interface.Contact
 
         Task<IEnumerable<People>> GetByName(string name);
 
-        void Create(People people);
+        void Create(People people, string[] apps);
 
         void Update(string id, People app);
 

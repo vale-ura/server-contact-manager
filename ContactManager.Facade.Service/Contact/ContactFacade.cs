@@ -16,9 +16,9 @@ namespace ContactManager.Facade.Service.Contact
             _peopleService = peopleService;
         }
 
-        public void Create(People people)
+        public void Create(People people, string[] apps)
         {
-            _peopleService.Create(people);
+            _peopleService.Create(people, apps);
         }
         public async Task<IEnumerable<People>> Get()
         {
