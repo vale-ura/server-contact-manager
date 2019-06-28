@@ -12,7 +12,7 @@ namespace ContactManager.Infrastructure.Domain.Data
         {
             Apps = new List<Applications>();
         }
-        
+
         public string Name { get; set; }
 
         public string Email { get; set; }

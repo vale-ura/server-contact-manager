@@ -69,7 +69,7 @@ namespace ContactManager.API.Controllers.Contacts
             {
                 var app = AutoMapper.Mapper.Map<ContactDTO, Infrastructure.Domain.Data.People>(contact);
 
-                _contactFacade.Create(app);
+                _contactFacade.Create(app, contact.Applications);
 
                 return new ReturnViewModel(HttpStatusCode.OK, "Save Successfully", false);
             }
