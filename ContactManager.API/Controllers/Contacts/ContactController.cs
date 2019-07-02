@@ -87,7 +87,7 @@ namespace ContactManager.API.Controllers.Contacts
             {
                 var app = AutoMapper.Mapper.Map<ContactDTO, Infrastructure.Domain.Data.People>(contact);
 
-                _contactFacade.Update(contact.Id, app);
+                _contactFacade.Update(contact.Id, app, contact.Applications);
 
                 return new ReturnViewModel(HttpStatusCode.OK, "Update Successfully", false);
             }

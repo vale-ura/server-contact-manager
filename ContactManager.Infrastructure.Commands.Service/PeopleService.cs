@@ -84,9 +84,20 @@ namespace ContactManager.Infrastructure.Commands.Service
             _mongoCollectionPeople.InsertOne(people);
         }
 
-        public void Update(string id, People appIn)
+        public void Update(string id, People appIn, string[] applications)
         {
-            _mongoCollectionPeople.ReplaceOne(people => people.Id == id, appIn);
+            var people = _mongoCollectionPeople.Find(x => x.Id == id).FirstOrDefault();
+
+            people.Email = appIn.Email;
+            people.Name = appIn.Name;
+            people.Phone = appIn.Phone;
+
+            people.Applications.Clear();
+
+              foreach (var ap in applications)
+                people.Applications.Add(new MongoDBRef("ContactManagerDB", "Applications",  new ObjectId(ap)));
+
+            _mongoCollectionPeople.ReplaceOne(x => x.Id == id, people);
         }
 
         public void Remove(string id)

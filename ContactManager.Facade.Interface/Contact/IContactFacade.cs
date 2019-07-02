@@ -16,7 +16,7 @@ namespace ContactManager.Facade.Interface.Contact
 
         void Create(People people, string[] apps);
 
-        void Update(string id, People app);
+        void Update(string id, People people, string[] applications);
 
         void Remove(string id);
     }

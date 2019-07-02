@@ -13,7 +13,7 @@ namespace ContactManager.Infrastructure.Commands.Interface
         Task<People> Get(string id);
         Task<IEnumerable<People>> GetByName(string name);
         void Create(People application, string[] apps);
-        void Update(string id, People appIn);
+        void Update(string id, People appIn, string[] applications);
         void Remove(string id);
     }
 }
