@@ -21,6 +21,7 @@ namespace ContactManager.Infrastructure.Domain.Data
 
         public IList<MongoDBRef> Applications { get; set; }
 
+        [BsonIgnore]
         public IList<Applications> Apps { get; set; }
 
         public bool Excluded { get; set; }

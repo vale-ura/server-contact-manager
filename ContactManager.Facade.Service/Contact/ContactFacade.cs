@@ -40,9 +40,9 @@ namespace ContactManager.Facade.Service.Contact
            _peopleService.Remove(id);
         }
 
-        public void Update(string id, People people)
+        public void Update(string id, People people, string[] applications)
         {
-            _peopleService.Update(id, people);
+            _peopleService.Update(id, people, applications);
         }
 
     }
