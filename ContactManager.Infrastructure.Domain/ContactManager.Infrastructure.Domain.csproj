@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MongoDB.Driver" Version="2.8.1" />
+      <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
       <PackageReference Include="Nuget.CommandLine" Version="5.0.2">
         <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         <PrivateAssets>all</PrivateAssets>
